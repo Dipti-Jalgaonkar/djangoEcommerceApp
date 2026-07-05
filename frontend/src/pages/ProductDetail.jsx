@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useParams } from "react-router-dom";
+import { useCart } from "../context/CartContext";
 import { useState, useEffect } from "react";
 
 function ProductDetails() {
@@ -8,6 +9,7 @@ function ProductDetails() {
     const [product, setProduct] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { addToCart } = useCart();
 
     useEffect(() => {
         fetch(`${BASE_URL}/api/products/${id}`)
@@ -76,7 +78,10 @@ function ProductDetails() {
                         <p className="texxt-xl text-gray-600 font-semibold mb-4">
                             ${product.price}
                         </p>
-                        <button className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition">
+                        <button
+                            onClick={() => addToCart(product)}
+                            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+                        >
                             Add To Cart
                         </button>
                         <div className="mt-4">
