@@ -31,5 +31,5 @@ class CartSerializer(serializers.ModelSerializer):
     total = serializers.ReadOnlyField()
 
     class Meta:
-        models = Cart
+        model = Cart
         fields = '__all__'

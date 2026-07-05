@@ -1,11 +1,11 @@
 import { useCart } from "../context/CartContext";
 
 function CartPage() {
-    const { cartItems, addToCart, removeFromCart, updateQuantity } = useCart();
-    const total = cartItems.reduce(
-        (acc, item) => acc + item.price * item.quantity,
-        0,
-    );
+    const { cartItems, total, addToCart, removeFromCart, updateQuantity } =
+        useCart();
+    console.log(cartItems, "cartItems");
+
+    const BASE_URL = import.meta.env.VITE_DJANGO_BASE_URL;
 
     return (
         <div className="pt-20 min-h-screen bg-gray-100 p-8">
@@ -14,61 +14,79 @@ function CartPage() {
                 <p className="text-center text-gray-600">Your Cart is Empty</p>
             ) : (
                 <div className="max-w-4xl mx-auto bg-white p-6 roounded-lg shadow-md">
-                    {cartItems.map((item) => (
-                        <div
-                            key={item.id}
-                            className="flex items-center justify-between mb-4"
-                        >
-                            <div>
-                                <h2 className="text-lg font-semibold">
-                                    {item.name}
-                                </h2>
-                                <p className="text-gray-600">${item.price} </p>
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        className="bg-gray-300 px-3 py-1 rounded"
-                                        onClick={() =>
-                                            updateQuantity(
-                                                item.id,
-                                                item.quantity - 1,
-                                            )
-                                        }
-                                    >
-                                        -
-                                    </button>
+                    {cartItems.map((item) => {
+                        console.log("Cart Item:", item);
+                        return (
+                            <div
+                                key={item.id}
+                                className="flex items-center justify-between mb-4"
+                            >
+                                <div className="flex items-center gap-4">
+                                    {item.product_image && (
+                                        <img
+                                            src={BASE_URL + item.product_image}
+                                            alt={item.product_name}
+                                            className="w-20 h-20 object-cover rounded"
+                                        />
+                                    )}
                                 </div>
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        className="bg-gray-300 px-3 py-1 rounded"
-                                        onClick={() =>
-                                            updateQuantity(
-                                                item.id,
-                                                item.quantity + 1,
-                                            )
-                                        }
-                                    >
-                                        +
-                                    </button>
-                                </div>
-                                <div className="flex items-center gap-3">
-                                    <button
-                                        className="bg-gray-300 px-3 py-1 rounded"
-                                        onClick={() => removeFromCart(item.id)}
-                                    >
-                                        Remove
-                                    </button>
-                                </div>
-                                <div className="border-t pt-4 mt-4 flex justify-between items-center">
-                                    <h2 className="text-xl font-bold">
-                                        Total:
+                                <div>
+                                    <h2 className="text-lg font-semibold">
+                                        {item.product_name}
                                     </h2>
-                                    <p className="text-xl font-semibold">
-                                        ${total.toFixed(2)}{" "}
+                                    <p className="text-gray-600">
+                                        ${item.product_price}{" "}
                                     </p>
                                 </div>
+                                <div className="flex items-center justify-between mb-4 gap-2">
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            className="bg-gray-300 px-3 py-1 rounded"
+                                            onClick={() =>
+                                                updateQuantity(
+                                                    item.id,
+                                                    item.quantity - 1,
+                                                )
+                                            }
+                                        >
+                                            -
+                                        </button>
+                                    </div>
+                                    <div>{item.quantity} </div>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            className="bg-gray-300 px-3 py-1 rounded"
+                                            onClick={() =>
+                                                updateQuantity(
+                                                    item.id,
+                                                    item.quantity + 1,
+                                                )
+                                            }
+                                        >
+                                            +
+                                        </button>
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            className="bg-gray-300 text-red-500 px-3 py-1 rounded"
+                                            onClick={() =>
+                                                removeFromCart(item.id)
+                                            }
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
+
+                    <div className="border-t pt-4 mt-4 flex justify-between items-center">
+                        <h2 className="text-xl font-bold">Total:</h2>
+                        <p className="text-xl font-semibold">
+                            ${total.toFixed(2)}{" "}
+                        </p>
+                    </div>
                 </div>
             )}
         </div>
