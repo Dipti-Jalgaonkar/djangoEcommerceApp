@@ -42,23 +42,14 @@ function ProductDetails() {
         return <div>No Product Found</div>;
     }
 
-    // return (
-    //     <Link
-    //         to={`product/${product.id}`}
-    //         className="bg-white rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-transform p-4 cursor-pointer"
-    //     >
-    //         <img
-    //             src={BASE_URL + product.image}
-    //             alt={product.name}
-    //             className="w-full h-56 ovect-cover rounded-lg mb-4"
-    //         />
-    //         <h2 className="text-lg font-semibold text-gray-800 truncate">
-    //             {product.name}
-    //         </h2>
-    //         <p className="text-gray-600 font-medium ">${product.price}</p>
-    //         <p className="text-gray-600 font-medium ">${product.description}</p>
-    //     </Link>
-    // );
+    const handleAddToCart = () => {
+        if (!localStorage.getItem("access_token")) {
+            window.location.href = "/login";
+            return;
+        }
+        addToCart(product.id);
+        alert("Product added to cart!");
+    };
 
     return (
         <div className="min-h-screen bg-gray-100 flex justify-center items-center py-10">
@@ -80,7 +71,7 @@ function ProductDetails() {
                             ${product.price}
                         </p>
                         <button
-                            onClick={() => addToCart(product.id)}
+                            onClick={handleAddToCart}
                             className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
                         >
                             Add To Cart
